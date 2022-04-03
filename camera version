@@ -14,6 +14,13 @@ let centerY;
 let centerZ;
 let c = 20;
 let cam;
+let img;
+let bg;
+let angle=0.3;
+
+function preload(){ img=loadImage('https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg');
+                   bg=loadImage('https://as2.ftcdn.net/v2/jpg/02/79/13/95/1000_F_279139559_pfkrZ9W2LBfXaYYCKHNuh52bzqgzLwd0.jpg');
+}
 
 function setup() {
   createCanvas(600, 600, WEBGL);
@@ -40,35 +47,26 @@ function setup() {
     sliderGroup[i].position(10, height + c);
     sliderGroup[i].style('width', '80px');
   }
+  sliderGroup[6] = createSlider(-100, 100, 0);
+  sliderGroup[7] = createSlider(10, 300, 100);
+  sliderGroup[6].position(100, height+5);
+  sliderGroup[6].style('width', '80px');
+  sliderGroup[7].position(100, height+17);
+  sliderGroup[7].style('width', '80px');
 }
 
 function draw() {
-  flying -= 0.1;
+  flying -= 0.01;
   var yoff = flying;
   for (var y = 0; y < rows; y++) {
     var xoff = 0;
     for (var x = 0; x < cols; x++) {
       terrain[x][y] = map(noise(xoff, yoff), 0, 1, -100, 100);
-      xoff += 0.2;
+      xoff += 0.1;
     }
-    yoff += 0.2;
+    yoff += 0.1;
   }
-
-  background(0);
-  translate(0, 50);
-  rotateX(PI / 3);
-  fill(200, 200, 200, 150);
-  translate(-w / 2, -h / 2);
-  for (var y = 0; y < rows - 1; y++) {
-    beginShape(TRIANGLE_STRIP);
-    for (var x = 0; x < cols; x++) {
-      let v=map(terrain[x][y],-100,100,0,255);
-      fill(v,v,v);
-      vertex(x * scl, y * scl, terrain[x][y]);
-      vertex(x * scl, (y + 1) * scl, terrain[x][y + 1]);
-    }
-    endShape();
-  }
+  
   
   X = sliderGroup[0].value();
   Y = sliderGroup[1].value();
@@ -76,5 +74,55 @@ function draw() {
   centerX = sliderGroup[3].value();
   centerY = sliderGroup[4].value();
   centerZ = sliderGroup[5].value();
+  let dirX = sliderGroup[6].value();
+  let dirY = sliderGroup[7].value();
   cam.camera(X, Y, Z, centerX, centerY, centerZ, 0, 1, 0);
+  background("#B8F8FB");
+  translate(0, 50);
+  rotateX(PI / 3);
+  push();
+  let locX = mouseX - width/2;
+  let locY = mouseY - height/2;
+  translate(locX,locY, 100);
+  rotateX(90);
+  rotateY(millis() / 1000);
+  fill(128);
+  cone(40, 10, 24, 1);
+  normalMaterial();
+  sphere(20);
+  pop();
+  
+   push()
+  texture(img);
+  rotateX(angle*0.3);
+  rotateY(angle*0.6);
+  rotateZ(angle*0.9);
+  sphere(40);
+  angle +=0.06;
+  pop()
+  
+  translate(-w / 2, -h / 2);
+  for (var y = 0; y < rows - 1; y++) {
+    beginShape(TRIANGLE_STRIP);
+    for (var x = 0; x < cols; x++) {
+      let v=map(terrain[x][y],-100,100,0,150);
+      directionalLight(255, 255, 255, dirX, dirY, 0);
+      ambientMaterial(0,0,v);
+      vertex(x * scl, y * scl, terrain[x][y]);
+      vertex(x * scl, (y + 1) * scl, terrain[x][y + 1]);
+    }
+    endShape();
+  }
+  push()
+  texture(bg);
+  translate(700,550,100);
+  pointLight(0,0,255 ,200,-200,0)
+  // Rotate on all three axis.
+  rotateX(angle*0.3);
+  rotateY(angle*0.6);
+  rotateZ(angle*0.9);
+  // Set the shape
+  torus(200, 10,1000,1000);
+  angle +=0.06;
+  pop()
 }
