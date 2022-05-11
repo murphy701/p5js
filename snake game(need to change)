@@ -172,3 +172,28 @@ function Snake() {
     rect(this.x, this.y, scl, scl);
   }
 }
+//-------------- 2인용 개발때 ijkl로 방향키(아스키 코드?)------------------
+function keyPressed() {
+  switch (keyCode) {
+    case 74:
+      if (direccion !== 'derecha') {
+        direccion = 'izquierda';
+      }
+      break;
+    case 76:
+      if (direccion !== 'izquierda') {
+        direccion = 'derecha';
+      }
+      break;
+    case 73:
+      if (direccion !== 'abajo') {
+        direccion = 'arriba';
+      }
+      break;
+    case 75:
+      if (direccion !== 'arriba') {
+        direccion = 'abajo';
+      }
+      break;
+  }
+}
