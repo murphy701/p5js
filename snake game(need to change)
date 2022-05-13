@@ -8,7 +8,7 @@ var scl = 20;
 var food;
 var sp;
 playfield = 600;
-
+let pg;
 function setup() {
   createCanvas(playfield, 640);
   background(51);
@@ -16,6 +16,7 @@ function setup() {
   frameRate (20);
   pickLocation();
   picksLocation();
+  pg=createGraphics(700, 700);
 }
 
 function draw() {
@@ -31,12 +32,18 @@ function draw() {
   fill (200,100,0);
   rect(food.x,food.y, scl, scl);
   
-  
   fill(150,0,0);
+  textSize(10);
+  
   rect(sp.x,sp.y, scl, scl);
     if(s.eat(sp)){
-    picksLocation();
+      pg.background(255);
+      pg.noFill();
+      pg.stroke(255);
+      image(pg, 10,10);
+      picksLocation();
     }
+
 }
 
 // Pick a location for food to appear
@@ -69,6 +76,7 @@ function picksLocation() {
       picksLocation();
     }
   }
+  
 }
 
 
@@ -158,7 +166,6 @@ function Snake() {
 
     this.x = this.x + this.xspeed*scl;
     this.y = this.y + this.yspeed*scl;
-
     this.x = constrain(this.x, 0, playfield-scl);
     this.y = constrain(this.y, 0, playfield-scl);
 
@@ -168,9 +175,9 @@ function Snake() {
     for (var i = 0; i < this.tail.length; i++) {
         rect(this.tail[i].x, this.tail[i].y, scl, scl);
     }
-
     rect(this.x, this.y, scl, scl);
   }
+  
 }
 //-------------- 2인용 개발때 ijkl로 방향키(아스키 코드?)------------------
 function keyPressed() {
