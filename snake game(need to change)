@@ -9,7 +9,7 @@ let button;
 
 function setup() {
   createCanvas(playfield, 640);
-  background(51);
+  background(51);  
   s[0] = new Snake();
   s[1] = new Snake();
   s[1].x=0;
@@ -31,7 +31,6 @@ function draw() {
     s[i].death();   
     s[i].update();   
     s[i].show();
-    text(color, 110+i*20, 625);
   }
   
   fill (200,100,0);
@@ -53,10 +52,12 @@ function draw() {
   
   if(s[0].score>15){
     textSize(200);
+    fill(255);
     text('1p win', 10, 320);
 
   } else if(s[1].score>15){
     textSize(200);
+    fill('#FFD400');
     text('2p win', 10, 320);  
   }
 }
