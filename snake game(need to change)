@@ -2,9 +2,11 @@ var s=[];
 var scl = 20;
 var food;
 var sp;
+let color = 0;
 playfield = 600;
 let pg;
 let button;
+
 function setup() {
   createCanvas(playfield, 640);
   background(51);
@@ -22,12 +24,14 @@ function draw() {
   background(51);
   scoreboard();
   for (let i = 0; i < 2; i++) {
+    color = i;
     if (s[i].eat(food)) {      
     pickLocation();    
     }
     s[i].death();   
     s[i].update();   
     s[i].show();
+    text(color, 110+i*20, 625);
   }
   
   fill (200,100,0);
@@ -183,7 +187,9 @@ function Snake() {
 
   }
   this.show = function(){
-    fill(255);
+    if (color == 0) {
+      fill(255);
+    } else fill('#FFD400');
     for (var i = 0; i < this.tail.length; i++) {
         rect(this.tail[i].x, this.tail[i].y, scl, scl);
     }
