@@ -1,0 +1,34 @@
+let bodypix;
+let segmentation;
+let img;
+let canvas;
+let bg;
+function preload() {
+img = loadImage('data/person.jpg');
+bodypix = ml5.bodyPix();
+}
+
+function setup() {
+canvas=createCanvas(480, 560);
+bodypix.segment(img, gotResults);
+canvas.drop(gotFile)
+background(400);
+}
+
+function gotResults(err, result) {
+if (err) {
+console.log(err);
+return;
+}
+segmentation = result;
+background(0);
+image(segmentation.backgroundMask, 0, 0, width, height);
+}
+function gotFile(file){
+bg=loadImage(file.data, imageView);
+}
+function imageView(){
+
+image(bg, 0, 0, width, height);
+image(segmentation.backgroundMask, 0, 0, width, height);
+}
